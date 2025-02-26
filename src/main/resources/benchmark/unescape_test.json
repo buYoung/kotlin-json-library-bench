@@ -1,0 +1,7 @@
+{
+    "escaped_string": "{\"name\":\"John\",\"message\":\"Hello\\nWorld\",\"path\":\"C:\\\\temp\"}",
+    "escaped_html": "&lt;div class=&quot;test&quot;&gt;Content&lt;/div&gt;",
+    "escaped_unicode": "\u0048\u0065\u006C\u006C\u006F\u0020\u0057\u006F\u0072\u006C\u0064",
+    "escaped_special": "\\\"Special\\\" \\\\characters\\\\ \\\/test\\\/",
+    "escaped_mixed": "Line1\\nLine2\\tTabbed\\rCarriage"
+}

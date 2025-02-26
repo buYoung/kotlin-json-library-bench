@@ -1,0 +1,27 @@
+{
+    "products": [
+        {
+            "id": "p1",
+            "name": "Smartphone",
+            "price": 799.99,
+            "specifications": {
+                "brand": "TechCo",
+                "model": "X2000",
+                "storage": "128GB",
+                "colors": ["black", "silver", "gold"],
+                "features": {
+                    "camera": "48MP",
+                    "screen": "6.5 inch",
+                    "battery": "4500mAh",
+                    "waterproof": true
+                }
+            },
+            "inStock": true,
+            "ratings": [4.5, 4.8, 4.2, 4.9, 4.7]
+        }
+    ],
+    "metadata": {
+        "lastUpdated": "2024-02-25T14:30:00Z",
+        "version": "1.0.0"
+    }
+}

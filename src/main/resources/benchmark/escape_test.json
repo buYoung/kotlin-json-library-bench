@@ -1,0 +1,8 @@
+{
+    "message": "Special characters: \" \\ / \b \f \n \r \t",
+    "html": "<div class=\"container\">\n\t<h1>Title</h1>\n\t<p>Content</p>\n</div>",
+    "unicode": "한글 테스트 \u3042 \u3044 \u3046",
+    "url": "https://example.com/path?param=value&special=@#$%",
+    "quotes": "He said: \"Hello, World!\"",
+    "mixed": "Path: C:\\Program Files\\App\\data.json"
+}
