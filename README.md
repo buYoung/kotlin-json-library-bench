@@ -1,162 +1,164 @@
-# Kotlin JSON 라이브러리 벤치마크 및 테스트
+# Kotlin JSON Library Benchmarks and Tests
 
-이 프로젝트는 Kotlin에서 사용할 수 있는 주요 JSON 라이브러리(Gson, Jackson, Moshi)의 기능, 일관성 및 성능을 테스트하고 벤치마크합니다.
+This project benchmarks and tests the functionality, consistency, and performance of major JSON libraries (Gson, Jackson, Moshi) available for Kotlin.
 
-## 프로젝트 구조
+*Read this in other languages: [한국어](README_ko.md)*
+
+## Project Structure
 
 ```
 kotlin_json_benchmark/
 ├── src/
 │   ├── main/
 │   │   ├── kotlin/com/livteam/benchmark/
-│   │   │   └── JsonLibraryTestRunner.kt    # 테스트 실행을 위한 메인 클래스
-│   │   └── resources/benchmark/            # 테스트 및 벤치마크용 JSON 파일
+│   │   │   └── JsonLibraryTestRunner.kt    # Main class for running tests
+│   │   └── resources/benchmark/            # JSON files for testing and benchmarking
 │   ├── test/
 │   │   └── kotlin/com/livteam/benchmark/test/
-│   │       └── JsonLibraryTest.kt          # JSON 라이브러리 기능 테스트
+│   │       └── JsonLibraryTest.kt          # JSON library functionality tests
 │   └── jmh/
 │       └── kotlin/com/livteam/benchmark/jmh/
-│           └── JsonBenchmark.kt            # JMH 벤치마크 코드
-└── build.gradle.kts                        # Gradle 빌드 스크립트
+│           └── JsonBenchmark.kt            # JMH benchmark code
+└── build.gradle.kts                        # Gradle build script
 ```
 
-## 테스트 내용
+## Test Content
 
-다음 기능에 대한 테스트를 포함합니다:
+The project includes tests for the following features:
 
-### 1. 기본 기능 테스트
+### 1. Basic Functionality Tests
 
-- **Minify 기능**: JSON 문자열에서 공백과 줄바꿈을 제거
-- **Beautify 기능**: JSON 문자열에 들여쓰기와 줄바꿈 추가
-- **Escape 기능**: 특수 문자(따옴표 등) 이스케이프 처리
-- **Unescape 기능**: 이스케이프된 문자 처리
-- **Double Escape 기능**: 이중 이스케이프된 문자 처리
+- **Minify**: Removing whitespace and line breaks from JSON strings
+- **Beautify**: Adding indentation and line breaks to JSON strings
+- **Escape**: Handling special characters (quotes, etc.)
+- **Unescape**: Processing escaped characters
+- **Double Escape**: Processing double-escaped characters
 
-### 2. 데이터셋 파싱 테스트
+### 2. Dataset Parsing Tests
 
-- **중간 크기 데이터셋**: 중간 복잡도의 JSON 데이터 파싱
-- **대형 데이터셋**: 대규모 JSON 데이터 파싱
+- **Medium-sized Dataset**: Parsing JSON data of medium complexity
+- **Large Dataset**: Parsing large-scale JSON data
 
-### 3. 라이브러리 간 일관성 테스트
+### 3. Cross-Library Consistency Tests
 
-동일한 입력에 대해 세 라이브러리(Gson, Jackson, Moshi)가 일관된 출력을 생성하는지 검증합니다.
+Verifying that all three libraries (Gson, Jackson, Moshi) produce consistent outputs for the same inputs.
 
-## 벤치마크 내용
+## Benchmark Content
 
-JMH(Java Microbenchmark Harness)를 사용하여 다음 작업의 성능을 측정합니다:
+Using JMH (Java Microbenchmark Harness), the project measures the performance of:
 
-### 1. 직렬화(Serialization) 벤치마크
+### 1. Serialization Benchmarks
 
-- **toJson**: 객체를 JSON 문자열로 변환하는 성능
-- **toJsonPretty**: 객체를 들여쓰기가 적용된 JSON 문자열로 변환하는 성능
+- **toJson**: Performance of converting objects to JSON strings
+- **toJsonPretty**: Performance of converting objects to indented JSON strings
 
-### 2. 역직렬화(Deserialization) 벤치마크
+### 2. Deserialization Benchmarks
 
-- **fromJson**: JSON 문자열을 객체로 변환하는 성능
-- **parseJson**: JSON 문자열을 파싱하는 성능
+- **fromJson**: Performance of converting JSON strings to objects
+- **parseJson**: Performance of parsing JSON strings
 
-### 3. 데이터 크기별 벤치마크
+### 3. Data Size-based Benchmarks
 
-- **소형 데이터**: 간단한 JSON 객체 처리 성능
-- **중형 데이터**: 중간 복잡도의 JSON 객체 처리 성능
-- **대형 데이터**: 복잡하고 큰 JSON 객체 처리 성능
+- **Small Data**: Performance of processing simple JSON objects
+- **Medium Data**: Performance of processing JSON objects of medium complexity
+- **Large Data**: Performance of processing complex and large JSON objects
 
-## 주요 발견사항
+## Key Findings
 
-### 라이브러리별 특성
+### Library Characteristics
 
 1. **Gson**
-   - HTML 태그를 유니코드로 이스케이프 처리 (`<` → `\u003c`)
-   - 정수를 정수 형태로 유지 (`30` → `30`)
-   - 설정이 간단하고 사용이 직관적
+   - Escapes HTML tags to Unicode (`<` → `\u003c`)
+   - Maintains integers as integers (`30` → `30`)
+   - Simple configuration and intuitive usage
 
 2. **Jackson**
-   - HTML 태그를 그대로 유지 (`<` → `<`)
-   - 정수를 정수 형태로 유지 (`30` → `30`)
-   - 다양한 기능과 높은 확장성 제공
+   - Preserves HTML tags as-is (`<` → `<`)
+   - Maintains integers as integers (`30` → `30`)
+   - Provides diverse features and high extensibility
 
 3. **Moshi**
-   - HTML 태그를 그대로 유지 (`<` → `<`)
-   - 정수를 부동소수점으로 변환하는 경향 (`30` → `30.0`)
-   - Kotlin 친화적인 API 제공
+   - Preserves HTML tags as-is (`<` → `<`)
+   - Tends to convert integers to floating-point (`30` → `30.0`)
+   - Provides Kotlin-friendly API
 
-### 일관성 문제 해결
+### Consistency Issues Resolved
 
-라이브러리 간 일관성 테스트에서는 다음과 같은 문제가 발견되었고 해결되었습니다:
+The cross-library consistency tests revealed and addressed the following issues:
 
-1. **정수/부동소수점 처리**: Moshi는 정수를 부동소수점으로 변환하는 경향이 있어, 정규화 함수를 통해 비교 시 이 차이를 무시하도록 처리했습니다.
+1. **Integer/Floating-point Handling**: Moshi tends to convert integers to floating-point, so a normalization function was implemented to ignore this difference during comparisons.
 
-2. **HTML 인코딩 차이**: Gson은 HTML 태그를 유니코드로 이스케이프하고, Jackson과 Moshi는 그대로 유지하는 경향이 있어, 이 차이를 인지하고 별도로 테스트했습니다.
+2. **HTML Encoding Differences**: Gson escapes HTML tags to Unicode, while Jackson and Moshi preserve them as-is. This difference was acknowledged and tested separately.
 
-### 성능 비교 (일반적인 경향)
+### Performance Comparison (General Trends)
 
-> 참고: 정확한 성능 결과는 벤치마크 실행 결과를 참조하세요.
+> Note: For precise performance results, refer to the benchmark execution results.
 
-1. **직렬화 성능**
-   - 소형 데이터: Gson ≈ Moshi > Jackson
-   - 중형 데이터: Jackson > Gson > Moshi
-   - 대형 데이터: Jackson > Gson > Moshi
+1. **Serialization Performance**
+   - Small Data: Gson ≈ Moshi > Jackson
+   - Medium Data: Jackson > Gson > Moshi
+   - Large Data: Jackson > Gson > Moshi
 
-2. **역직렬화 성능**
-   - 소형 데이터: Moshi > Gson > Jackson
-   - 중형 데이터: Jackson > Gson > Moshi
-   - 대형 데이터: Jackson > Gson > Moshi
+2. **Deserialization Performance**
+   - Small Data: Moshi > Gson > Jackson
+   - Medium Data: Jackson > Gson > Moshi
+   - Large Data: Jackson > Gson > Moshi
 
-## 환경 설정
+## Environment Setup
 
-### 필수 요구사항
+### Requirements
 
-- JDK 11 이상
-- Gradle 7.0 이상
+- JDK 11 or higher
+- Gradle 7.0 or higher
 
-### 의존성
+### Dependencies
 
 - Gson 2.10.1
 - Jackson 2.15.2
 - Moshi 1.15.0
 - JMH 1.37
 
-## 테스트 실행 방법
+## Running Tests
 
-모든 테스트를 실행하려면:
+To run all tests:
 
 ```bash
 ./gradlew test
 ```
 
-특정 테스트만 실행하려면:
+To run a specific test:
 
 ```bash
 ./gradlew test --tests "com.livteam.benchmark.test.JsonLibraryTest.test minify functionality"
 ```
 
-## 벤치마크 실행 방법
+## Running Benchmarks
 
-전체 벤치마크를 실행하려면:
+To run all benchmarks:
 
 ```bash
 ./gradlew bench
 ```
 
-벤치마크 결과는 `build/results/jmh/results.txt` 파일에 저장됩니다.
+Benchmark results are saved in the `build/results/jmh/results.txt` file.
 
-특정 벤치마크만 실행하려면:
+To run specific benchmarks:
 
 ```bash
 ./gradlew jmh -Pinclude=".*toJson.*"
 ```
 
-## 테스트 및 벤치마크 결과 해석
+## Interpreting Test and Benchmark Results
 
-### 테스트 결과
+### Test Results
 
-모든 테스트가 성공적으로 통과하면, 각 라이브러리가 기본 JSON 기능(minify, beautify, escape, unescape, 파싱)을 올바르게 수행하며, 라이브러리 간 데이터 일관성도 유지됨을 의미합니다.
+When all tests pass successfully, it means that each library correctly performs basic JSON operations (minify, beautify, escape, unescape, parsing) and maintains data consistency across libraries.
 
-HTML 인코딩과 같은 특정 차이점은 라이브러리의 설계 결정에 따른 것으로, 애플리케이션의 요구사항에 따라 적절한 라이브러리를 선택해야 합니다.
+Specific differences like HTML encoding are due to library design decisions and should be considered when selecting a library based on application requirements.
 
-### 벤치마크 결과
+### Benchmark Results
 
-벤치마크 결과는 다음과 같은 형식으로 출력됩니다:
+Benchmark results are output in the following format:
 
 ```
 Benchmark                                    Mode  Cnt    Score    Error  Units
@@ -165,17 +167,17 @@ JsonBenchmark.jacksonFromJson               thrpt   30  234.567 ±  2.345  ops/u
 JsonBenchmark.moshiFromJson                 thrpt   30  345.678 ±  3.456  ops/us
 ```
 
-- **Mode**: 측정 모드 (thrpt: 처리량, avgt: 평균 시간)
-- **Cnt**: 측정 횟수
-- **Score**: 측정 결과 값
-- **Error**: 오차 범위
-- **Units**: 측정 단위 (ops/us: 마이크로초당 작업 수, us/op: 작업당 마이크로초)
+- **Mode**: Measurement mode (thrpt: throughput, avgt: average time)
+- **Cnt**: Number of measurements
+- **Score**: Measurement result value
+- **Error**: Error margin
+- **Units**: Measurement unit (ops/us: operations per microsecond, us/op: microseconds per operation)
 
-높은 처리량(thrpt)과 낮은 평균 시간(avgt)이 더 좋은 성능을 의미합니다.
+Higher throughput (thrpt) and lower average time (avgt) indicate better performance.
 
-#### 최신 벤치마크 결과 (2025-02-26)
+#### Latest Benchmark Results (2025-02-26)
 
-##### 처리량 측정 결과 (thrpt, 높을수록 좋음)
+##### Throughput Measurement Results (thrpt, higher is better)
 
 ```
 Benchmark                            Mode  Cnt      Score      Error   Units
@@ -199,7 +201,7 @@ JsonBenchmark.moshiMinify           thrpt   30      0.162 ±    0.002  ops/us
 JsonBenchmark.moshiUnescape         thrpt   30      0.500 ±    0.006  ops/us
 ```
 
-##### 평균 시간 측정 결과 (avgt, 낮을수록 좋음)
+##### Average Time Measurement Results (avgt, lower is better)
 
 ```
 Benchmark                            Mode  Cnt      Score      Error   Units
@@ -223,56 +225,56 @@ JsonBenchmark.moshiMinify            avgt   30     25.578 ±    0.238   us/op
 JsonBenchmark.moshiUnescape          avgt   30      8.252 ±    0.231   us/op
 ```
 
-#### 벤치마크 결과 분석
+#### Benchmark Results Analysis
 
-위 결과를 통해 다음과 같은 분석이 가능합니다:
+From the above results, the following analysis can be made:
 
-1. **기본 JSON 작업 성능**:
+1. **Basic JSON Operation Performance**:
    - **Beautify**: Jackson > Gson > Moshi
    - **Minify**: Jackson > Gson > Moshi
    - **Escape**: Jackson > Gson > Moshi
    - **Unescape**: Jackson > Gson > Moshi
 
-2. **데이터 크기별 성능**:
-   - **중간 크기 데이터**: Jackson > Gson > Moshi
-   - **대형 데이터**: Jackson > Gson > Moshi
+2. **Data Size-based Performance**:
+   - **Medium-sized Data**: Jackson > Gson > Moshi
+   - **Large Data**: Jackson > Gson > Moshi
 
-3. **종합 성능 순위**:
-   - 1위: **Jackson** - 대부분의 작업에서 가장 빠른 성능을 보여줍니다.
-   - 2위: **Gson** - Jackson보다는 느리지만 Moshi보다는 빠른 중간 수준의 성능을 제공합니다.
-   - 3위: **Moshi** - 전반적으로 가장 느린 성능을 보여주지만, Kotlin 친화적인 API를 제공합니다.
+3. **Overall Performance Ranking**:
+   - 1st: **Jackson** - Shows the fastest performance in most operations.
+   - 2nd: **Gson** - Slower than Jackson but faster than Moshi, providing mid-level performance.
+   - 3rd: **Moshi** - Shows the slowest performance overall but provides a Kotlin-friendly API.
 
-## 라이브러리 선택 가이드
+## Library Selection Guide
 
-프로젝트에 적합한 JSON 라이브러리를 선택할 때 고려할 사항:
+Considerations when selecting a JSON library for your project:
 
 1. **Gson**
-   - 장점: 간단한 API, 직관적인 사용법, 적은 의존성
-   - 단점: 대형 데이터에서 성능이 다소 떨어짐
-   - 적합한 경우: 간단한 JSON 처리, 가벼운 애플리케이션
+   - Pros: Simple API, intuitive usage, minimal dependencies
+   - Cons: Somewhat lower performance with large data
+   - Suitable for: Simple JSON processing, lightweight applications
 
 2. **Jackson**
-   - 장점: 뛰어난 성능, 다양한 기능, 높은 확장성
-   - 단점: 복잡한 API, 많은 의존성
-   - 적합한 경우: 대규모 데이터 처리, 엔터프라이즈 애플리케이션
+   - Pros: Excellent performance, diverse features, high extensibility
+   - Cons: Complex API, many dependencies
+   - Suitable for: Large-scale data processing, enterprise applications
 
 3. **Moshi**
-   - 장점: Kotlin 친화적, 간결한 API, 적절한 성능
-   - 단점: 정수를 부동소수점으로 변환하는 특성
-   - 적합한 경우: Kotlin 프로젝트, 중소규모 애플리케이션
+   - Pros: Kotlin-friendly, concise API, adequate performance
+   - Cons: Tendency to convert integers to floating-point
+   - Suitable for: Kotlin projects, small to medium-sized applications
 
-## 라이선스
+## License
 
-이 프로젝트는 MIT 라이선스 하에 배포됩니다. 자세한 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
+This project is distributed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-MIT 라이선스는 다음과 같은 권한을 제공합니다:
-- 상업적 사용
-- 수정
-- 배포
-- 개인 사용
+The MIT License grants the following permissions:
+- Commercial use
+- Modification
+- Distribution
+- Private use
 
-단, 소프트웨어를 사용할 때 MIT 라이선스 사본을 포함해야 합니다.
+However, a copy of the MIT License must be included when using the software.
 
-## 기여
+## Contributing
 
-이슈 제보 및 풀 리퀘스트는 언제나 환영합니다.
+Issues and pull requests are always welcome.
